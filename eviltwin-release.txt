@@ -1,15 +1,23 @@
 360T7 Evil Twin 固件（airgeddon + fluxion 工具链）
 
 在 passwall-sing-box 基础上增加：
-- 无线安全测试核心：aircrack-ng 全家、mdk4、macchanger、dsniff、nmap、tmux（airgeddon/fluxion 无头模式）、lighttpd+php8-cgi、GNU gawk/sed/grep、iptables-nft、tcpdump
+- 无线安全测试核心：aircrack-ng 全家、macchanger、nmap、tmux（airgeddon/fluxion 无头模式）、
+  lighttpd+php8-cgi、GNU gawk/sed/grep、iptables-nft、tcpdump、net-tools
 - PMKID：hcxdumptool + hcxtools
-- WPS：reaver + pixiewps + bully
-- 其他：ettercap、cowpatty、p7zip、psmisc、net-tools、bc、unzip、pciutils、usbutils、ethtool、ip-full、rfkill
-- diy 垫片：/usr/bin/service（procd 转发，供 fluxion 使用）
+- WPS：reaver + pixiewps
+- DHCP：kea-dhcp4（fluxion 硬依赖，连客户端追踪都解析 kea 租约格式）
+- diy：service 垫片（procd 转发，fluxion 用）、openwrt 官方 packages feed（补 php8/net-tools）
 
-未包含（明确排除）：john、crunch、tshark、kea、hashcat
+已确认缺失（官方 feed 全线淘汰，无法打包）：mdk4、dsniff、ettercap、bully、cowpatty、p7zip、rfkill
+影响与替代：
+- deauth 用 aireplay-ng（airgeddon 选 aireplay 方式；fluxion 需去掉依赖）
+- WPS 用 reaver+pixiewps（无 bully）
+- 握手校验用 aircrack-ng（fluxion 三选一模式，无 cowpatty 无碍）
+- fluxion 的 7zr（证书分析功能）无替代，该功能不可用
 
-使用前提：
-- 360T7 需硬改 256MB NAND（rootfs 余量约 +11MB）
-- 假认证页依赖 80 端口：测试前需停掉占用 80 的服务
-- fluxion 依赖 cowpatty/kea-dhcp4 的部分功能若 feed 缺包会缺失，首次编译后核对 .config 中符号是否被接受
+fluxion 上机前必须打的一行补丁（删除 feed 中不存在的依赖，否则依赖检查不过）：
+  sed -i -e 's/ "cowpatty"//' -e 's/ "7zr:7zip-reduced|p7zip"//' -e 's/ "dsniff"//' -e 's/ "rfkill"//' -e 's/ "mdk4"//' fluxion.sh
+
+其余注意：
+- 360T7 需硬改 256MB NAND（固件 sysupgrade 约 47M）
+- 假认证页依赖 80 端口：测试前停掉占用 80 的服务
