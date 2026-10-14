@@ -6,17 +6,22 @@
 - PMKID：hcxdumptool + hcxtools
 - WPS：reaver + pixiewps
 - DHCP：kea-dhcp4（fluxion 硬依赖，连客户端追踪都解析 kea 租约格式）
-- diy：service 垫片（procd 转发，fluxion 用）、openwrt 官方 packages feed（补 php8/net-tools）
+- 自带源码包（custom-packages/，官方 feed 已淘汰）：mdk4（aircrack-ng/mdk4 e94422ce，
+  去 pcre1 依赖——24.10 已淘汰 pcre1，且 pcre 仅影响可选的 ESSID 正则过滤）、
+  cowpatty+genpmk（joswr1ght/cowpatty 0a274975，原作者仓库）
+- diy：service 垫片（procd 转发，fluxion 用）、openwrt 官方 packages feed（补 php8/net-tools）、
+  rfkill/7zr/dsniff 三个 stub
 
-已确认缺失（官方 feed 全线淘汰，无法打包）：mdk4、dsniff、ettercap、bully、cowpatty、p7zip、rfkill
-影响与替代：
-- deauth 用 aireplay-ng（airgeddon 选 aireplay 方式；fluxion 需去掉依赖）
-- WPS 用 reaver+pixiewps（无 bully）
-- 握手校验用 aircrack-ng（fluxion 三选一模式，无 cowpatty 无碍）
-- fluxion 的 7zr（证书分析功能）无替代，该功能不可用
+已确认缺失：ettercap、bully、p7zip
+- ettercap：现存配方全是老版 NG-0.7.3 autotools（依赖已淘汰的 pcre1/libnet1），
+  现代 0.8.x 需手写 cmake 配方，暂缺。MITM 阶段可用 arpspoof 思路替代或后续补
+- bully：WPS 有 reaver+pixiewps 顶着，功能不受损
+- p7zip：fluxion 的 7zr 仅"更新安装器"用（打包备份），攻击流程不碰，stub 顶上即可
 
-fluxion 上机前必须打的一行补丁（删除 feed 中不存在的依赖，否则依赖检查不过）：
-  sed -i -e 's/ "cowpatty"//' -e 's/ "7zr:7zip-reduced|p7zip"//' -e 's/ "dsniff"//' -e 's/ "rfkill"//' -e 's/ "mdk4"//' fluxion.sh
+fluxion 依赖检查说明：
+mdk4/cowpatty 为真实包，rfkill/7zr/dsniff 由固件内 stub 满足（rfkill 返回 0——
+mt76 本就无 rfkill 设备；7zr/dsniff 触发即报错——攻击流程从不调用）。
+因此 fluxion 无需任何 sed 补丁即可通过依赖检查。
 
 其余注意：
 - 360T7 需硬改 256MB NAND（固件 sysupgrade 约 47M）
