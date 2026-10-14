@@ -9,8 +9,14 @@
 - 自带源码包（custom-packages/，官方 feed 已淘汰）：mdk4（aircrack-ng/mdk4 e94422ce，
   去 pcre1 依赖——24.10 已淘汰 pcre1，且 pcre 仅影响可选的 ESSID 正则过滤）、
   cowpatty+genpmk（joswr1ght/cowpatty 0a274975，原作者仓库）
-- diy：service 垫片（procd 转发，fluxion 用）、openwrt 官方 packages feed（补 php8/net-tools）、
-  rfkill/7zr/dsniff 三个 stub
+- diy：service 垫片（procd 转发，fluxion 用）、rfkill/7zr/dsniff 三个 stub
+
+包名/可见性坑（实测 run 38585799298 manifest 得出）：
+- php8-cgi 其实在 immortalwrt/packages@openwrt-24.10 一直有；缺席真因是它的
+  DEPENDS 写 `php8`（不带 + 号 = depends），config 未显式开 CONFIG_PACKAGE_php8=y
+  时 php8-cgi 符号不可见，被 defconfig 静默丢弃。已显式加 php8=y
+- immortalwrt feed 无 `net-tools` 包名，route 命令由 net-tools-route 提供
+  （PROVIDES:=route），config 已换用
 
 已确认缺失：ettercap、bully、p7zip
 - ettercap：现存配方全是老版 NG-0.7.3 autotools（依赖已淘汰的 pcre1/libnet1），
