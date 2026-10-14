@@ -1,0 +1,15 @@
+360T7 Evil Twin 固件（airgeddon + fluxion 工具链）
+
+在 passwall-sing-box 基础上增加：
+- 无线安全测试核心：aircrack-ng 全家、mdk4、macchanger、dsniff、nmap、tmux（airgeddon/fluxion 无头模式）、lighttpd+php8-cgi、GNU gawk/sed/grep、iptables-nft、tcpdump
+- PMKID：hcxdumptool + hcxtools
+- WPS：reaver + pixiewps + bully
+- 其他：ettercap、cowpatty、p7zip、psmisc、net-tools、bc、unzip、pciutils、usbutils、ethtool、ip-full、rfkill
+- diy 垫片：/usr/bin/service（procd 转发，供 fluxion 使用）
+
+未包含（明确排除）：john、crunch、tshark、kea、hashcat
+
+使用前提：
+- 360T7 需硬改 256MB NAND（rootfs 余量约 +11MB）
+- 假认证页依赖 80 端口：测试前需停掉占用 80 的服务
+- fluxion 依赖 cowpatty/kea-dhcp4 的部分功能若 feed 缺包会缺失，首次编译后核对 .config 中符号是否被接受
