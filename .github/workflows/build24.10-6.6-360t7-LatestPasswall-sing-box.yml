@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
 
 env:
-  REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x-24.10
+  REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x-6.6
   REPO_BRANCH: openwrt-24.10-6.6
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: 2410-6.6-360t7-passwall-sing-box.config
@@ -70,7 +70,7 @@ jobs:
          cd openwrt
          ./scripts/feeds update -a
          rm -rf feeds/packages/lang/golang
-         git clone https://github.com/kenzok8/golang feeds/packages/lang/golang
+         git clone https://github.com/kenzok8/golang -b 1.25 feeds/packages/lang/golang
 
 
     - name: Install feeds
@@ -79,7 +79,7 @@ jobs:
         ./scripts/feeds install -a 
         
         # 移除 openwrt feeds 自带的核心库
-        rm -rf feeds/packages/net/{xray-core,v2ray-geodata,sing-box,chinadns-ng,dns2socks,hysteria,ipt2socks,microsocks,naiveproxy,shadowsocks-libev,shadowsocks-rust,shadowsocksr-libev,simple-obfs,tcping,trojan-plus,tuic-client,v2ray-plugin,xray-plugin,geoview,shadow-tls}
+        rm -rf feeds/packages/net/{xray-core,v2ray-geodata,sing-box,chinadns-ng,dns2socks,hysteria,ipt2socks,microsocks,naiveproxy,shadowsocks-rust,shadowsocksr-libev,simple-obfs,tcping,v2ray-plugin,xray-plugin,geoview,shadow-tls}
         git clone https://github.com/Openwrt-Passwall/openwrt-passwall-packages package/passwall-packages
 
         # 移除 openwrt feeds 过时的luci版本
