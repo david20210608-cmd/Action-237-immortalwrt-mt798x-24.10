@@ -39,7 +39,9 @@ endef
 
 define Package/airgeddon/install
 	$(INSTALL_DIR) $(1)/usr/share/airgeddon $(1)/usr/bin
-	$(CP) -a $(PKG_BUILD_DIR)/. $(1)/usr/share/airgeddon/
+	# .pkgdir 在 PKG_BUILD_DIR 里，cp . 会"拷进自己"（cp: cannot copy a directory
+	# into itself），改 tar 管道并排除构建戳
+	(cd $(PKG_BUILD_DIR) && tar --exclude=./.pkgdir --exclude='.prepared*' --exclude='.configured*' --exclude='.built*' -cf - .) | (cd $(1)/usr/share/airgeddon && tar -xf -)
 	$(INSTALL_BIN) ./files/airgeddon $(1)/usr/bin/
 endef
 
