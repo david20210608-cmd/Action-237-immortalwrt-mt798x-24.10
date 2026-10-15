@@ -39,5 +39,7 @@ mt76 本就无 rfkill 设备；7zr/dsniff 触发即报错——攻击流程从�
 因此 fluxion 无需任何 sed 补丁即可通过依赖检查。
 
 其余注意：
-- 360T7 需硬改 256MB NAND（固件 sysupgrade 约 47M）
+- 360T7 闪存为原厂 128MB NAND（硬改的是内存 512MB）。DTS 固定分区：ubi=108MB
+  （0x580000 起 0x6c00000），当前 sysupgrade 51MB，剩余 ~50MB 自动成为
+  rootfs_data 可写 overlay；再塞 fluxion/airgeddon（+3~5MB）无压力
 - 假认证页依赖 80 端口：测试前停掉占用 80 的服务
