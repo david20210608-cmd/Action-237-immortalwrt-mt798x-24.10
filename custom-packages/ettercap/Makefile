@@ -10,6 +10,9 @@
 #   - 源内构建下 utils/etterfilter、utils/etterlog 输出路径与同名源码子目录
 #     撞车（ld: Is a directory），把可执行文件统一输出到 $(PKG_BUILD_DIR)/bin；
 #     install(TARGETS) 的 DESTINATION 不受影响，安装布局不变
+#   - 运行必需两个库：libettercap.so 和 libettercap-ui.so（文本界面，目标名
+#     ec_interfaces），install 段用 libettercap*.so* 一起带上，缺一个 ettercap
+#     二进制就起不来
 #
 include $(TOPDIR)/rules.mk
 
@@ -65,7 +68,7 @@ define Package/ettercap/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/ettercap $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/etterlog $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/etterfilter $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libettercap.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libettercap*.so* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/etc/ettercap/. $(1)/etc/ettercap/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/ettercap/. $(1)/usr/share/ettercap/
 endef
