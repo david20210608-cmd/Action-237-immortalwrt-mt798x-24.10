@@ -7,6 +7,9 @@
 #     用补丁降到 3.16（项目未用 3.25 专属特性）
 #   - 关 curses/GTK：airgeddon 只用文本模式 (-Tq)，可免掉 ncurses/panel/menu 依赖
 #   - BUNDLED_LIBS=OFF：禁止回退到 bundled_deps，缺依赖时直接报错暴露问题
+#   - 源内构建下 utils/etterfilter、utils/etterlog 输出路径与同名源码子目录
+#     撞车（ld: Is a directory），把可执行文件统一输出到 $(PKG_BUILD_DIR)/bin；
+#     install(TARGETS) 的 DESTINATION 不受影响，安装布局不变
 #
 include $(TOPDIR)/rules.mk
 
@@ -54,7 +57,8 @@ CMAKE_OPTIONS += \
 	-DLIBRARY_BUILD=OFF \
 	-DSYSTEM_LIBS=ON \
 	-DBUNDLED_LIBS=OFF \
-	-DINSTALL_SYSCONFDIR=/etc
+	-DINSTALL_SYSCONFDIR=/etc \
+	-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=$(PKG_BUILD_DIR)/bin
 
 define Package/ettercap/install
 	$(INSTALL_DIR) $(1)/usr/bin $(1)/usr/lib $(1)/etc/ettercap $(1)/usr/share/ettercap
