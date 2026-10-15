@@ -18,6 +18,9 @@
   wireless-tools，而脚本只是个 1600 行 bash，从 aircrack-ng 官方仓库按
   1.7 tag 取，与固件内 aircrack-ng 同版本，装 /usr/sbin/airmon-ng 同路径）
 - nftables CLI（airgeddon 防火墙可选 nft 模式；默认走 iptables-nft 也已具备）
+- ettercap 0.8.4.1 全家（ettercap/etterlog/etterfilter + libettercap.so +
+  libettercap-ui.so + /etc/ettercap 配置）——已解开 run 38687501053 的
+  sysupgrade 镜像实测在位（aarch64 ELF 与双库齐全），airgeddon et_sniffing 解锁
 
 包名/可见性坑（实测 run 38585799298 manifest 得出）：
 - php8-cgi 其实在 immortalwrt/packages@openwrt-24.10 一直有；缺席真因是它的
@@ -26,7 +29,7 @@
 - immortalwrt feed 无 `net-tools` 包名，route 命令由 net-tools-route 提供
   （PROVIDES:=route），config 已换用
 
-已确认缺失：bully、p7zip
+已确认缺失：bully、p7zip（均不影响 evil twin 主流程）
 - bully：WPS 有 reaver+pixiewps 顶着，功能不受损
 - p7zip：fluxion 的 7zr 仅"更新安装器"用（打包备份），攻击流程不碰，stub 顶上即可
 
