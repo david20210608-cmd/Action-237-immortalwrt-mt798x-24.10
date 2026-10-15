@@ -13,11 +13,15 @@
   PCRE2 可选直连、curses/GTK/plugins/geoip/lua 全关、BUNDLED_LIBS=OFF 强制系统库、
   补丁降 cmake 最低版本 3.25→3.16 适配 ubuntu-22.04 runner；装 ettercap/etterlog/
   etterfilter + libettercap.so + /etc/ettercap）
-- 攻击工具整树内置（custom-packages/，钉官方 release tag）：
-  fluxion v6.32（FluxionNetwork tag 18d6c9e，装 /usr/share/fluxion，
-  /usr/bin/fluxion 链接；headless 自动回退 tmux 模式）、
+- 攻击工具整树内置（custom-packages/，钉官方 release tag，run 38742302041
+  解包实测在位）：fluxion v6.32（FluxionNetwork tag 18d6c9e，装
+  /usr/share/fluxion，/usr/bin/fluxion 链接；headless 自动回退 tmux 模式；
+  补丁禁用启动联网查新——防无网超时、防 master.zip 覆盖钉版树）、
   airgeddon v12.02（tag 700ad7d，装 /usr/share/airgeddon，
-  /usr/bin/airgeddon wrapper 强制 AIRGEDDON_WINDOWS_HANDLING=tmux）
+  /usr/bin/airgeddon wrapper 强制 AIRGEDDON_WINDOWS_HANDLING=tmux +
+  AIRGEDDON_AUTO_UPDATE=false 关启动更新检查）
+- 整树打包坑：.pkgdir 建在 PKG_BUILD_DIR 内，install 段 cp -a 源树会
+  "copy into itself"，须 tar 管道排除 .pkgdir/构建戳
 - diy：service 垫片（procd 转发，fluxion 用）、rfkill/7zr/dsniff 三个 stub、
   airmon-ng 脚本直装（airgeddon 必需项；官方子包依赖已被 24.10 淘汰的
   wireless-tools，而脚本只是个 1600 行 bash，从 aircrack-ng 官方仓库按
