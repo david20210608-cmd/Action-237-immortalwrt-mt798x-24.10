@@ -13,6 +13,11 @@
   PCRE2 可选直连、curses/GTK/plugins/geoip/lua 全关、BUNDLED_LIBS=OFF 强制系统库、
   补丁降 cmake 最低版本 3.25→3.16 适配 ubuntu-22.04 runner；装 ettercap/etterlog/
   etterfilter + libettercap.so + /etc/ettercap）
+- 攻击工具整树内置（custom-packages/，钉官方 release tag）：
+  fluxion v6.32（FluxionNetwork tag 18d6c9e，装 /usr/share/fluxion，
+  /usr/bin/fluxion 链接；headless 自动回退 tmux 模式）、
+  airgeddon v12.02（tag 700ad7d，装 /usr/share/airgeddon，
+  /usr/bin/airgeddon wrapper 强制 AIRGEDDON_WINDOWS_HANDLING=tmux）
 - diy：service 垫片（procd 转发，fluxion 用）、rfkill/7zr/dsniff 三个 stub、
   airmon-ng 脚本直装（airgeddon 必需项；官方子包依赖已被 24.10 淘汰的
   wireless-tools，而脚本只是个 1600 行 bash，从 aircrack-ng 官方仓库按
@@ -29,7 +34,10 @@
 - immortalwrt feed 无 `net-tools` 包名，route 命令由 net-tools-route 提供
   （PROVIDES:=route），config 已换用
 
-已确认缺失：bully、p7zip（均不影响 evil twin 主流程）
+已确认缺失（均有意不打包，对照 v6.32/v12.02 官方依赖清单+镜像实测）：
+bully（reaver+pixiewps 顶替）、p7zip（stub）、crunch/hashcat/john/tshark
+（离线破解/流量分析，路由器 CPU 无意义）、bettercap/beef/hostapd-wpe/asleap
+（sslstrip2/BeEF/Enterprise 模式专用）
 - bully：WPS 有 reaver+pixiewps 顶着，功能不受损
 - p7zip：fluxion 的 7zr 仅"更新安装器"用（打包备份），攻击流程不碰，stub 顶上即可
 

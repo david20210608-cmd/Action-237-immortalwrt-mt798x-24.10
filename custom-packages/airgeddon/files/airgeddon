@@ -1,0 +1,4 @@
+#!/bin/sh
+# headless: router has no xterm, force tmux window handling
+export AIRGEDDON_WINDOWS_HANDLING=tmux
+exec bash /usr/share/airgeddon/airgeddon.sh "$@"
