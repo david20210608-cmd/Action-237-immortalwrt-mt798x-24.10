@@ -52,3 +52,24 @@ mkdir -p package/base-files/files/usr/sbin
 curl -fsSL https://raw.githubusercontent.com/aircrack-ng/aircrack-ng/1.7/scripts/airmon-ng.linux \
   -o package/base-files/files/usr/sbin/airmon-ng
 chmod +x package/base-files/files/usr/sbin/airmon-ng
+
+#
+# Web 层固化修复（run 38742302041 实刷后 LuCI 403 的两处根因）：
+#  1) lighttpd（captive portal 用）默认自启抢 IPv4:80，uhttpd 只剩 v6/443，
+#     浏览器 http://IP 打到 lighttpd 得裸 403。攻击时 fluxion/airgeddon 会
+#     自行 start lighttpd，平时禁用自启即可。
+#  2) 本固件 LuCI 是 ucode 版，但 uhttpd-mod-ucode 未被依赖选中（kconfig
+#     同类坑），uhttpd 无法派发 /cgi-bin/luci。config 已显式开
+#     uhttpd-mod-ucode/uhttpd-mod-lua；这里补 ucode_prefix 并清掉指向
+#     不存在 Lua SGI 的残留 lua_prefix。
+#
+mkdir -p package/base-files/files/etc/uci-defaults
+cat > package/base-files/files/etc/uci-defaults/99-evil-twin-web <<'SH'
+#!/bin/sh
+/etc/init.d/lighttpd disable
+uci -q delete uhttpd.main.lua_prefix
+uci -q add_list uhttpd.main.ucode_prefix='/cgi-bin/luci=/usr/share/ucode/luci/uhttpd.uc'
+uci -q commit uhttpd
+exit 0
+SH
+chmod +x package/base-files/files/etc/uci-defaults/99-evil-twin-web
