@@ -8,7 +8,11 @@
 - DHCP：kea-dhcp4（fluxion 硬依赖，连客户端追踪都解析 kea 租约格式）
 - 自带源码包（custom-packages/，官方 feed 已淘汰）：mdk4（aircrack-ng/mdk4 e94422ce，
   去 pcre1 依赖——24.10 已淘汰 pcre1，且 pcre 仅影响可选的 ESSID 正则过滤）、
-  cowpatty+genpmk（joswr1ght/cowpatty 0a274975，原作者仓库）
+  cowpatty+genpmk（joswr1ght/cowpatty 0a274975，原作者仓库）、
+  ettercap 0.8.4.1（Ettercap/ettercap v0.8.4.1 tag 0dc84097，手写 cmake 配方：
+  PCRE2 可选直连、curses/GTK/plugins/geoip/lua 全关、BUNDLED_LIBS=OFF 强制系统库、
+  补丁降 cmake 最低版本 3.25→3.16 适配 ubuntu-22.04 runner；装 ettercap/etterlog/
+  etterfilter + libettercap.so + /etc/ettercap）
 - diy：service 垫片（procd 转发，fluxion 用）、rfkill/7zr/dsniff 三个 stub、
   airmon-ng 脚本直装（airgeddon 必需项；官方子包依赖已被 24.10 淘汰的
   wireless-tools，而脚本只是个 1600 行 bash，从 aircrack-ng 官方仓库按
@@ -22,9 +26,7 @@
 - immortalwrt feed 无 `net-tools` 包名，route 命令由 net-tools-route 提供
   （PROVIDES:=route），config 已换用
 
-已确认缺失：ettercap、bully、p7zip
-- ettercap：现存配方全是老版 NG-0.7.3 autotools（依赖已淘汰的 pcre1/libnet1），
-  现代 0.8.x 需手写 cmake 配方，暂缺。MITM 阶段可用 arpspoof 思路替代或后续补
+已确认缺失：bully、p7zip
 - bully：WPS 有 reaver+pixiewps 顶着，功能不受损
 - p7zip：fluxion 的 7zr 仅"更新安装器"用（打包备份），攻击流程不碰，stub 顶上即可
 
