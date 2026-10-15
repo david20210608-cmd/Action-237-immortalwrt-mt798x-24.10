@@ -9,7 +9,11 @@
 - 自带源码包（custom-packages/，官方 feed 已淘汰）：mdk4（aircrack-ng/mdk4 e94422ce，
   去 pcre1 依赖——24.10 已淘汰 pcre1，且 pcre 仅影响可选的 ESSID 正则过滤）、
   cowpatty+genpmk（joswr1ght/cowpatty 0a274975，原作者仓库）
-- diy：service 垫片（procd 转发，fluxion 用）、rfkill/7zr/dsniff 三个 stub
+- diy：service 垫片（procd 转发，fluxion 用）、rfkill/7zr/dsniff 三个 stub、
+  airmon-ng 脚本直装（airgeddon 必需项；官方子包依赖已被 24.10 淘汰的
+  wireless-tools，而脚本只是个 1600 行 bash，从 aircrack-ng 官方仓库按
+  1.7 tag 取，与固件内 aircrack-ng 同版本，装 /usr/sbin/airmon-ng 同路径）
+- nftables CLI（airgeddon 防火墙可选 nft 模式；默认走 iptables-nft 也已具备）
 
 包名/可见性坑（实测 run 38585799298 manifest 得出）：
 - php8-cgi 其实在 immortalwrt/packages@openwrt-24.10 一直有；缺席真因是它的

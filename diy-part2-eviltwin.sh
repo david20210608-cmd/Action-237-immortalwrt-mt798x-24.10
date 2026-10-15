@@ -42,3 +42,13 @@ done
 chmod +x package/base-files/files/usr/bin/rfkill \
          package/base-files/files/usr/bin/7zr \
          package/base-files/files/usr/bin/dsniff
+
+#
+# airmon-ng：airgeddon 必需项。feed 里有独立 airmon-ng 子包，但依赖已被 24.10
+# 淘汰的 wireless-tools 无法安装；它只是个脚本，直接从 aircrack-ng 官方仓库
+# 按 tag 取（1.7，与固件内 aircrack-ng 版本一致），装到与官方子包相同的路径。
+#
+mkdir -p package/base-files/files/usr/sbin
+curl -fsSL https://raw.githubusercontent.com/aircrack-ng/aircrack-ng/1.7/scripts/airmon-ng.linux \
+  -o package/base-files/files/usr/sbin/airmon-ng
+chmod +x package/base-files/files/usr/sbin/airmon-ng
