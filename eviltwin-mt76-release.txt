@@ -1,0 +1,6 @@
+360T7 Evil Twin 固件（mt76 版，官方 immortalwrt 24.10 源码）
+
+与旧版（immortalwrt-mt798x SDK 源码）的差异：
+- 无线驱动由 MTK 专有 mt_wifi（ra0/rax0）改为官方 mt76/mac80211
+- 板载 2.4G/5G 原生支持 monitor 模式，airmon-ng/airodump-ng/mdk4/fluxion/airgeddon 可用
+- 旧版实测定性：mt_wifi 无 cfg80211/radiotap，攻击链无法驱动板载网卡，故整体迁移
