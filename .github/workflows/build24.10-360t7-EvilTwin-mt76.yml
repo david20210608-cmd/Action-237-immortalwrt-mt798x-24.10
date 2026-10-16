@@ -15,6 +15,13 @@ name: Build immortalwrt24.10 360T7 EvilTwin-mt76 (official)
 on:
   repository_dispatch:
   workflow_dispatch:
+  # dispatch 只认默认分支上的 workflow 文件；本文件仅在 evil-twin 分支，
+  # 故用 push+paths 触发本分支构建（重触发：空提交touch本文件即可）
+  push:
+    branches:
+      - 360t7-evil-twin
+    paths:
+      - '.github/workflows/build24.10-360t7-EvilTwin-mt76.yml'
 
 env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
