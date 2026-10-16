@@ -4,3 +4,14 @@
 - 无线驱动由 MTK 专有 mt_wifi（ra0/rax0）改为官方 mt76/mac80211
 - 板载 2.4G/5G 原生支持 monitor 模式，airmon-ng/airodump-ng/mdk4/fluxion/airgeddon 可用
 - 旧版实测定性：mt_wifi 无 cfg80211/radiotap，攻击链无法驱动板载网卡，故整体迁移
+
+## 首编产物验收（run 38834699581，2026-10-16，tag 2026.10.16-1242）
+
+sysupgrade.itb 61MB，unsquash 实测（非仅 manifest）：
+- 无线栈：mt7915e.ko / mt76.ko / mt76-connac-lib.ko / mac80211.ko / cfg80211.ko（内核 6.6.157），mt7981_{rom_patch,wa,wm,wo}.bin 四件固件齐；mt_wifi 零残留
+- 攻击链：aircrack-ng 1.7、mdk4（/usr/sbin）、cowpatty 4.6、ettercap 0.8.4.1（etterlog/etterfilter/libettercap*.so 全）、fluxion、airgeddon、airmon-ng
+- 新增工具：hcxtools 6.3.2、hcxdumptool 6.3.4（/usr/sbin）、nmap 7.95、reaver 1.6.6、pixiewips 1.4.2
+- 运行时：bash 5.2、gawk、tmux、curl 8.22、zerotier 1.14.1、getopt/script-utils/mount-utils/coreutils-sleep 四件缺口包
+- web：wpad-openssl、lighttpd、php8-cgi；uci-defaults 99-evil-twin-web 在位（lighttpd 默认禁自启）；service/rfkill/7zr/dsniff 四 stub 在位
+- 注意：本版"整体继承"旧 config，仍含 passwall/mwan3（luci-app-passwall 26.10.16、mwan3 2.11.16）；纯安全实验版（无 passwall/mwan3）在 t7-sec-firmware 仓库
+- 跨刷提示：当前设备跑的是 mt798x-SDK 源码固件，换本版 board/镜像元数据不同，sysupgrade 会拒收，需 uboot 恢复强刷或 `sysupgrade -F`
